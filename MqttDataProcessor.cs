@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MQTTnet;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace mqtt_report_generator
 {
@@ -8,6 +10,7 @@ namespace mqtt_report_generator
     {
         private string logFolderPath;
         private List<string> dvtValues;
+        private MqttClient mqttClient;
 
         public MqttDataProcessor(string logFolderPath, string brokerAddress, int brokerPort)
         {
@@ -15,20 +18,19 @@ namespace mqtt_report_generator
             // Retrieve the dvt-#### values from the MQTT topic
             var dvtTopic = "AppTestKit/log/testlist";
 
-            // TODO: Instantiate and connect an MQTT client object
-            MqttClient mqttClient = new MqttClient(brokerAddress, brokerPort);
-            mqttClient.Connect();
+            // Instantiate and connect an MQTT client object
+            mqttClient = new MqttClient(brokerAddress, brokerPort);
+            mqttClient.Connect().GetAwaiter().GetResult();
 
-            // TODO: Retrieve the dvtMessage using the MQTT client library
-            string dvtMessage = mqttClient.RetrieveMessage(dvtTopic);
+            // Retrieve the dvtMessage using the MQTT client library
+            MqttApplicationMessage dvtMessage = mqttClient.RetrieveMessage(dvtTopic).GetAwaiter().GetResult();
 
             // Extract the dvt-#### values from the message
-            string[] dvtValueArray = dvtMessage.Split(',');
+            string[] dvtValueArray = dvtMessage.Payload.ToString().Split(',');
 
             // Convert the array to a list
             dvtValues = new List<string>(dvtValueArray);
         }
-
 
         public void ProcessData()
         {

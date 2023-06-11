@@ -1,7 +1,8 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
+using MQTTnet.Protocol;
+using System.Threading.Tasks;
 
 namespace mqtt_report_generator
 {
@@ -19,52 +20,77 @@ namespace mqtt_report_generator
                 .Build();
 
             managedMqttClient = new MqttFactory().CreateManagedMqttClient();
-            managedMqttClient.StartAsync(options).GetAwaiter().GetResult();
+            Connect_Client(options).GetAwaiter().GetResult();
         }
 
-        public void Publish(string topic, string payload)
+        public static async Task Connect_Client(ManagedMqttClientOptions options)
+        {
+            /*
+             * This sample creates a simple managed MQTT client and connects to a public broker.
+             *
+             * The managed client extends the existing _MqttClient_. It adds the following features.
+             * - Reconnecting when connection is lost.
+             * - Storing pending messages in an internal queue so that an enqueue is possible while the client remains not connected.
+             */
+
+            var mqttFactory = new MqttFactory();
+
+            using (var managedMqttClient = mqttFactory.CreateManagedMqttClient())
+            {
+                var mqttClientOptions = new MqttClientOptionsBuilder()
+                    .WithTcpServer("broker.hivemq.com")
+                    .Build();
+
+                var managedMqttClientOptions = new ManagedMqttClientOptionsBuilder()
+                    .WithClientOptions(mqttClientOptions)
+                    .Build();
+
+                await managedMqttClient.StartAsync(managedMqttClientOptions);
+
+                // The application message is not sent. It is stored in an internal queue and
+                // will be sent when the client is connected.
+                await managedMqttClient.EnqueueAsync("Topic", "Payload");
+
+                Console.WriteLine("The managed MQTT client is connected.");
+
+                // Wait until the queue is fully processed.
+                SpinWait.SpinUntil(() => managedMqttClient.PendingApplicationMessagesCount == 0, 10000);
+
+                Console.WriteLine($"Pending messages = {managedMqttClient.PendingApplicationMessagesCount}");
+            }
+        }
+
+        public async Task Disconnect()
+        {
+            await managedMqttClient.StopAsync();
+        }
+
+        public async Task Publish(string topic, string payload)
         {
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(topic)
                 .WithPayload(payload)
-                .WithExactlyOnceQoS()
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .WithRetainFlag()
                 .Build();
-
-            managedMqttClient.PublishAsync(message).GetAwaiter().GetResult();
+            await managedMqttClient.EnqueueAsync(message);
         }
-
-        public void RetainedPublish(string topic, string payload)
+         
+        public async Task Subscribe(string topic)
         {
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic(topic)
-                .WithPayload(payload)
-                .WithRetainFlag()
-                .Build();
-
-            managedMqttClient.PublishAsync(message).GetAwaiter().GetResult();
+            await managedMqttClient.SubscribeAsync(topic);
         }
 
-        public void Subscribe(string topic)
+        public async Task Unsubscribe(string topic)
         {
-            managedMqttClient.SubscribeAsync(topic).GetAwaiter().GetResult();
+            await managedMqttClient.UnsubscribeAsync(topic);
         }
 
-        public void Connect()
-        {
-            managedMqttClient.StartAsync().GetAwaiter().GetResult();
-        }
-
-        public void Disconnect()
-        {
-            managedMqttClient.StopAsync().GetAwaiter().GetResult();
-        }
-
-        public string RetrieveMessage(string topic)
+        public async Task<MqttApplicationMessage> RetrieveMessage(string topic)
         {
             // TODO: Implement message retrieval logic using the MQTT client library
             // Return the retrieved message
-            return 
+            return null;
         }
     }
 }

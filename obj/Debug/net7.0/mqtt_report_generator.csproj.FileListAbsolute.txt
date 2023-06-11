@@ -1,0 +1,15 @@
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\bin\Debug\net7.0\mqtt_report_generator.exe
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\bin\Debug\net7.0\mqtt_report_generator.deps.json
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\bin\Debug\net7.0\mqtt_report_generator.runtimeconfig.json
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\bin\Debug\net7.0\mqtt_report_generator.dll
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\bin\Debug\net7.0\mqtt_report_generator.pdb
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.csproj.AssemblyReference.cache
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.AssemblyInfoInputs.cache
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.AssemblyInfo.cs
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.csproj.CoreCompileInputs.cache
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.dll
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\refint\mqtt_report_generator.dll
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.pdb
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\mqtt_report_generator.genruntimeconfig.cache
+C:\Users\Dan\lab\C#\mqtt_report_generator\mqtt_report_generator\obj\Debug\net7.0\ref\mqtt_report_generator.dll

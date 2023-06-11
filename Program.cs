@@ -118,11 +118,14 @@ namespace mqtt_report_generator
                 // Connect to the MQTT broker
                 mqttClient.Connect();
 
-                // Perform MQTT operations, such as publishing and subscribing
-                // Example:
-                mqttClient.Publish("topic", "message");
-                mqttClient.RetainedPublish("retained-topic", "retained-message");
-                mqttClient.Subscribe("topic-to-subscribe");
+                // Subscribe to the desired topics
+                mqttClient.Subscribe("AppTestKit/log/#");
+
+                // Create an instance of MqttDataProcessor with the log folder path
+                var dataProcessor = new MqttDataProcessor(LogFolderPath);
+
+                // Process the data and generate the report
+                dataProcessor.ProcessData();
 
                 // Disconnect from the MQTT broker
                 mqttClient.Disconnect();
@@ -134,6 +137,7 @@ namespace mqtt_report_generator
                 Console.WriteLine($"An error occurred during report generation: {ex.Message}");
             }
         }
+
 
 
         static void PrintVariables()

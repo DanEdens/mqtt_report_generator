@@ -4,8 +4,8 @@ namespace mqtt_report_generator
 {
     class Program
     {
-        static string brokerAddress;
-        static int brokerPort;
+        static string brokerAddress = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
+        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
 
         static void Main(string[] args)
         {

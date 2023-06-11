@@ -10,6 +10,11 @@ namespace mqtt_report_generator
         static string brokerAddress = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
         static string logFolderPath = "logs"; // Update with your desired log folder path
 
+        public static string BrokerAddress { get; set; } = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
+        public static string Device { get; set; } = Environment.GetEnvironmentVariable("DUT_DEVICE");
+        public static string Version { get; set; } = Environment.GetEnvironmentVariable("DUT_VERSION");
+        public static string Mac { get; set; } = Environment.GetEnvironmentVariable("DUT_MAC_ADDRESS");
+
         static void Main(string[] args)
         {
             // Create an instance of MqttDataProcessor with the brokerAddress
@@ -122,7 +127,7 @@ namespace mqtt_report_generator
                 mqttClient.Subscribe("AppTestKit/log/#");
 
                 // Create an instance of MqttDataProcessor with the log folder path and broker address
-                var dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress);
+                var dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress, brokerPort);
 
                 // Process the data and generate the report
                 dataProcessor.ProcessData();

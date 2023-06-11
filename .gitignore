@@ -3,3 +3,4 @@ obj/#
 bin/Debug/*
 *.pdb
 *.dll
+*.cache

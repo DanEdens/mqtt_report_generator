@@ -59,5 +59,12 @@ namespace mqtt_report_generator
         {
             managedMqttClient.StopAsync().GetAwaiter().GetResult();
         }
+
+        public string RetrieveMessage(string topic)
+        {
+            // TODO: Implement message retrieval logic using the MQTT client library
+            // Return the retrieved message
+            return 
+        }
     }
 }

@@ -14,12 +14,12 @@ namespace mqtt_report_generator
         public static string Device { get; set; } = Environment.GetEnvironmentVariable("DUT_DEVICE");
         public static string Version { get; set; } = Environment.GetEnvironmentVariable("DUT_VERSION");
         public static string Mac { get; set; } = Environment.GetEnvironmentVariable("DUT_MAC_ADDRESS");
+        // Create an instance of MqttDataProcessor with the brokerAddress
+        MqttDataProcessor dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress, brokerPort);
 
         static void Main(string[] args)
         {
-            // Create an instance of MqttDataProcessor with the brokerAddress
-            MqttDataProcessor dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress, brokerPort);
-
+            
             Console.WriteLine("MQTT Report Generator - Broker Configuration");
             Console.WriteLine("-------------------------------------------");
 

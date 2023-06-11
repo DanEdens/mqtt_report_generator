@@ -7,14 +7,14 @@ namespace mqtt_report_generator
     class Program
     {
         static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
-
-        public static string BrokerAddress { get; set; } = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
-        public static string Device { get; set; } = Environment.GetEnvironmentVariable("DUT_DEVICE");
-        public static string Version { get; set; } = Environment.GetEnvironmentVariable("DUT_VERSION");
-        public static string Mac { get; set; } = Environment.GetEnvironmentVariable("DUT_MAC_ADDRESS");
+        static string brokerAddress = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
+        static string logFolderPath = "logs"; // Update with your desired log folder path
 
         static void Main(string[] args)
         {
+            // Create an instance of MqttDataProcessor with the brokerAddress
+            MqttDataProcessor dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress);
+
             Console.WriteLine("MQTT Report Generator - Broker Configuration");
             Console.WriteLine("-------------------------------------------");
 
@@ -38,27 +38,27 @@ namespace mqtt_report_generator
                 switch (choice)
                 {
                     case "1":
-                        BrokerAddress = GetInput("Enter broker address: ");
-                        Console.WriteLine($"Broker address set to: {BrokerAddress}");
+                        brokerAddress = GetInput("Enter broker address: ");
+                        Console.WriteLine($"Broker address set to: {brokerAddress}");
                         break;
                     case "2":
                         int.TryParse(GetInput("Enter broker port: "), out brokerPort);
                         Console.WriteLine($"Broker port set to: {brokerPort}");
                         break;
                     case "3":
-                        Device = GetInput("Enter device: ");
-                        Console.WriteLine($"Device set to: {Device}");
+                        Program.Device = GetInput("Enter device: ");
+                        Console.WriteLine($"Device set to: {Program.Device}");
                         break;
                     case "4":
-                        Version = GetInput("Enter version: ");
-                        Console.WriteLine($"Version set to: {Version}");
+                        Program.Version = GetInput("Enter version: ");
+                        Console.WriteLine($"Version set to: {Program.Version}");
                         break;
                     case "5":
-                        Mac = GetInput("Enter MAC address: ");
-                        Console.WriteLine($"MAC address set to: {Mac}");
+                        Program.Mac = GetInput("Enter MAC address: ");
+                        Console.WriteLine($"MAC address set to: {Program.Mac}");
                         break;
                     case "6":
-                        if (string.IsNullOrEmpty(BrokerAddress))
+                        if (string.IsNullOrEmpty(brokerAddress))
                         {
                             Console.WriteLine("Broker address is not set. Please set it before generating the report.");
                         }
@@ -66,15 +66,15 @@ namespace mqtt_report_generator
                         {
                             Console.WriteLine("Broker port is not set. Please set it before generating the report.");
                         }
-                        else if (string.IsNullOrEmpty(Device))
+                        else if (string.IsNullOrEmpty(Program.Device))
                         {
                             Console.WriteLine("Device is not set. Please set it before generating the report.");
                         }
-                        else if (string.IsNullOrEmpty(Version))
+                        else if (string.IsNullOrEmpty(Program.Version))
                         {
                             Console.WriteLine("Version is not set. Please set it before generating the report.");
                         }
-                        else if (string.IsNullOrEmpty(Mac))
+                        else if (string.IsNullOrEmpty(Program.Mac))
                         {
                             Console.WriteLine("MAC address is not set. Please set it before generating the report.");
                         }
@@ -113,7 +113,7 @@ namespace mqtt_report_generator
             try
             {
                 // Create an instance of MqttClient with the broker address and port
-                var mqttClient = new MqttClient(BrokerAddress, brokerPort);
+                var mqttClient = new MqttClient(brokerAddress, brokerPort);
 
                 // Connect to the MQTT broker
                 mqttClient.Connect();
@@ -121,8 +121,8 @@ namespace mqtt_report_generator
                 // Subscribe to the desired topics
                 mqttClient.Subscribe("AppTestKit/log/#");
 
-                // Create an instance of MqttDataProcessor with the log folder path
-                var dataProcessor = new MqttDataProcessor(LogFolderPath);
+                // Create an instance of MqttDataProcessor with the log folder path and broker address
+                var dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress);
 
                 // Process the data and generate the report
                 dataProcessor.ProcessData();
@@ -138,17 +138,15 @@ namespace mqtt_report_generator
             }
         }
 
-
-
         static void PrintVariables()
         {
             Console.WriteLine("Current Variables:");
             Console.WriteLine("------------------");
-            Console.WriteLine($"Broker Address: {BrokerAddress}");
+            Console.WriteLine($"Broker Address: {brokerAddress}");
             Console.WriteLine($"Broker Port: {brokerPort}");
-            Console.WriteLine($"Device: {Device}");
-            Console.WriteLine($"Version: {Version}");
-            Console.WriteLine($"MAC Address: {Mac}");
+            Console.WriteLine($"Device: {Program.Device}");
+            Console.WriteLine($"Version: {Program.Version}");
+            Console.WriteLine($"MAC Address: {Program.Mac}");
         }
 
         static void SaveVariables()
@@ -158,11 +156,11 @@ namespace mqtt_report_generator
                 // Create a dictionary to store the variables and their values
                 var variables = new Dictionary<string, string>
                 {
-                    { "BROKER_ADDRESS", BrokerAddress },
+                    { "BROKER_ADDRESS", brokerAddress },
                     { "BROKER_PORT", brokerPort.ToString() },
-                    { "DUT_DEVICE", Device },
-                    { "DUT_VERSION", Version },
-                    { "DUT_MAC_ADDRESS", Mac }
+                    { "DUT_DEVICE", Program.Device },
+                    { "DUT_VERSION", Program.Version },
+                    { "DUT_MAC_ADDRESS", Program.Mac }
                 };
 
                 // Create or overwrite the configuration file

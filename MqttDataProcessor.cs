@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 
+
+
 namespace mqtt_report_generator
 {
     public class MqttDataProcessor
@@ -9,11 +11,26 @@ namespace mqtt_report_generator
         private string logFolderPath;
         private List<string> dvtValues;
 
-        public MqttDataProcessor(string logFolderPath)
+        public MqttDataProcessor(string logFolderPath, string brokerAddress)
         {
             this.logFolderPath = logFolderPath;
-            dvtValues = new List<string> { "dvt-2601", "dvt-3834", "dvt-3280", "dvt-2682", "dvt-2681", "dvt-2678", "dvt-2675", "dvt-2674" };
+            // Retrieve the dvt-#### values from the MQTT topic
+            var dvtTopic = "AppTestKit/log/testlist";
+
+            // TODO: Instantiate and connect an MQTT client object
+            MqttClient mqttClient = new MqttClient();
+            mqttClient.Connect(brokerAddress); // Use the provided broker address
+
+            // TODO: Retrieve the dvtMessage using the MQTT client library
+            string dvtMessage = mqttClient.RetrieveMessage(dvtTopic);
+
+            // Extract the dvt-#### values from the message
+            string[] dvtValueArray = dvtMessage.Split(',');
+
+            // Convert the array to a list
+            dvtValues = new List<string>(dvtValueArray);
         }
+
 
         public void ProcessData()
         {

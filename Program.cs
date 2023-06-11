@@ -18,7 +18,7 @@ namespace mqtt_report_generator
         static void Main(string[] args)
         {
             // Create an instance of MqttDataProcessor with the brokerAddress
-            MqttDataProcessor dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress);
+            MqttDataProcessor dataProcessor = new MqttDataProcessor(logFolderPath, brokerAddress, brokerPort);
 
             Console.WriteLine("MQTT Report Generator - Broker Configuration");
             Console.WriteLine("-------------------------------------------");
@@ -121,7 +121,8 @@ namespace mqtt_report_generator
                 var mqttClient = new MqttClient(brokerAddress, brokerPort);
 
                 // Connect to the MQTT broker
-                mqttClient.Connect();
+                MqttClient.Connect().GetAwaiter().GetResult();
+
 
                 // Subscribe to the desired topics
                 mqttClient.Subscribe("AppTestKit/log/#");

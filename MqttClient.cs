@@ -20,10 +20,10 @@ namespace mqtt_report_generator
                 .Build();
 
             managedMqttClient = new MqttFactory().CreateManagedMqttClient();
-            Connect_Client(options).GetAwaiter().GetResult();
+            Connect().GetAwaiter().GetResult();
         }
 
-        public static async Task Connect_Client(ManagedMqttClientOptions options)
+        public static async Task Connect()
         {
             /*
              * This sample creates a simple managed MQTT client and connects to a public broker.

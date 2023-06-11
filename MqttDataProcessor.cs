@@ -18,9 +18,9 @@ namespace mqtt_report_generator
             // Retrieve the dvt-#### values from the MQTT topic
             var dvtTopic = "AppTestKit/log/testlist";
 
-            // Instantiate and connect an MQTT client object
+            // Instantiate an MQTT client object
             mqttClient = new MqttClient(brokerAddress, brokerPort);
-            mqttClient.Connect().GetAwaiter().GetResult();
+            MqttClient.Connect().GetAwaiter().GetResult();
 
             // Retrieve the dvtMessage using the MQTT client library
             MqttApplicationMessage dvtMessage = mqttClient.RetrieveMessage(dvtTopic).GetAwaiter().GetResult();

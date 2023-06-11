@@ -6,7 +6,8 @@ namespace mqtt_report_generator
 {
     class Program
     {
-        public static int brokerPort { get; set; } = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
+        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
+
         public static string BrokerAddress { get; set; } = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
         public static string Device { get; set; } = Environment.GetEnvironmentVariable("DUT_DEVICE");
         public static string Version { get; set; } = Environment.GetEnvironmentVariable("DUT_VERSION");
@@ -109,13 +110,31 @@ namespace mqtt_report_generator
 
         static void GenerateReport()
         {
-            // TODO: Implement your report generation logic here
-            Console.WriteLine("Generating report...");
-            // Perform MQTT connection and report generation tasks
-            // You can use a library like MQTTnet to handle the MQTT communication
+            try
+            {
+                // Create an instance of MqttClient with the broker address and port
+                var mqttClient = new MqttClient(BrokerAddress, brokerPort);
 
-            Console.WriteLine("Report generation completed.");
+                // Connect to the MQTT broker
+                mqttClient.Connect();
+
+                // Perform MQTT operations, such as publishing and subscribing
+                // Example:
+                mqttClient.Publish("topic", "message");
+                mqttClient.RetainedPublish("retained-topic", "retained-message");
+                mqttClient.Subscribe("topic-to-subscribe");
+
+                // Disconnect from the MQTT broker
+                mqttClient.Disconnect();
+
+                Console.WriteLine("Report generation completed.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred during report generation: {ex.Message}");
+            }
         }
+
 
         static void PrintVariables()
         {

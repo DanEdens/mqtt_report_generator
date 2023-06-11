@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace mqtt_report_generator
 {
     class Program
     {
-        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
-
+        public static int brokerPort { get; set; } = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
         public static string BrokerAddress { get; set; } = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
         public static string Device { get; set; } = Environment.GetEnvironmentVariable("DUT_DEVICE");
         public static string Version { get; set; } = Environment.GetEnvironmentVariable("DUT_VERSION");
@@ -26,7 +26,8 @@ namespace mqtt_report_generator
                 Console.WriteLine("5. Set MAC Address");
                 Console.WriteLine("6. Start Report Generation");
                 Console.WriteLine("7. Print Variables");
-                Console.WriteLine("8. Exit");
+                Console.WriteLine("8. Save Variables");
+                Console.WriteLine("9. Exit");
                 Console.WriteLine();
 
                 Console.Write("Enter your choice: ");
@@ -86,6 +87,9 @@ namespace mqtt_report_generator
                         PrintVariables();
                         break;
                     case "8":
+                        SaveVariables();
+                        break;
+                    case "9":
                         Console.WriteLine("Exiting...");
                         return;
                     default:
@@ -122,6 +126,38 @@ namespace mqtt_report_generator
             Console.WriteLine($"Device: {Device}");
             Console.WriteLine($"Version: {Version}");
             Console.WriteLine($"MAC Address: {Mac}");
+        }
+
+        static void SaveVariables()
+        {
+            try
+            {
+                // Create a dictionary to store the variables and their values
+                var variables = new Dictionary<string, string>
+                {
+                    { "BROKER_ADDRESS", BrokerAddress },
+                    { "BROKER_PORT", brokerPort.ToString() },
+                    { "DUT_DEVICE", Device },
+                    { "DUT_VERSION", Version },
+                    { "DUT_MAC_ADDRESS", Mac }
+                };
+
+                // Create or overwrite the configuration file
+                using (var writer = new StreamWriter("config.txt"))
+                {
+                    foreach (var variable in variables)
+                    {
+                        // Write each variable and its value in the format "KEY=VALUE"
+                        writer.WriteLine($"{variable.Key}={variable.Value}");
+                    }
+                }
+
+                Console.WriteLine("Variables saved to the configuration file.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while saving the variables: {ex.Message}");
+            }
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace mqtt_report_generator
 {
     class Program
     {
-        static string brokerAddress = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
-        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
+        static string brokerAddress = Environment.GetEnvironmentVariable("AWSIP");
+        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("AWSPORT"));
 
         static string device;
         static string version;
@@ -24,7 +25,8 @@ namespace mqtt_report_generator
                 Console.WriteLine("4. Set Version");
                 Console.WriteLine("5. Set MAC Address");
                 Console.WriteLine("6. Start Report Generation");
-                Console.WriteLine("7. Exit");
+                Console.WriteLine("7. Print Variables");
+                Console.WriteLine("8. Exit");
                 Console.WriteLine();
 
                 Console.Write("Enter your choice: ");
@@ -86,6 +88,9 @@ namespace mqtt_report_generator
                         }
                         break;
                     case "7":
+                        PrintVariables();
+                        break;
+                    case "8":
                         Console.WriteLine("Exiting...");
                         return;
                     default:
@@ -105,6 +110,17 @@ namespace mqtt_report_generator
             // You can use a library like MQTTnet to handle the MQTT communication
 
             Console.WriteLine("Report generation completed.");
+        }
+
+        static void PrintVariables()
+        {
+            Console.WriteLine("Current Variables:");
+            Console.WriteLine("------------------");
+            Console.WriteLine("Broker Address: " + brokerAddress);
+            Console.WriteLine("Broker Port: " + brokerPort);
+            Console.WriteLine("Device: " + device);
+            Console.WriteLine("Version: " + version);
+            Console.WriteLine("MAC Address: " + mac);
         }
     }
 }

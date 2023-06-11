@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "T4+DlGeLQp7XnxFRdbY3vfhxFtZhpbvJJNzcsn/B6R6+G2XkzCnvsBxZ5wZR5a6ElkXFsozjafNJCpDwXqHrXQ==",
+  "dgSpecHash": "7WV0YNT/3OL8rtiWQ333mhPW2SUvp5pwxoBmC6OT8WjQP1MrYR8b68NlXW/umslHoT8adOqUcIhdUn4k5EOYyA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dan\\lab\\C#\\mqtt_report_generator\\mqtt_report_generator\\mqtt_report_generator.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Dan\\.nuget\\packages\\mqttnet\\4.2.1.781\\mqttnet.4.2.1.781.nupkg.sha512",
+    "C:\\Users\\Dan\\.nuget\\packages\\mqttnet.extensions.managedclient\\4.2.1.781\\mqttnet.extensions.managedclient.4.2.1.781.nupkg.sha512",
+    "C:\\Users\\Dan\\.nuget\\packages\\mqttnet.extensions.rpc\\4.2.1.781\\mqttnet.extensions.rpc.4.2.1.781.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -7,6 +7,10 @@ namespace mqtt_report_generator
         static string brokerAddress = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
         static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
 
+        static string device;
+        static string version;
+        static string mac;
+
         static void Main(string[] args)
         {
             Console.WriteLine("MQTT Report Generator - Broker Configuration");
@@ -16,8 +20,11 @@ namespace mqtt_report_generator
             {
                 Console.WriteLine("1. Set Broker Address");
                 Console.WriteLine("2. Set Broker Port");
-                Console.WriteLine("3. Start Report Generation");
-                Console.WriteLine("4. Exit");
+                Console.WriteLine("3. Set Device");
+                Console.WriteLine("4. Set Version");
+                Console.WriteLine("5. Set MAC Address");
+                Console.WriteLine("6. Start Report Generation");
+                Console.WriteLine("7. Exit");
                 Console.WriteLine();
 
                 Console.Write("Enter your choice: ");
@@ -37,6 +44,21 @@ namespace mqtt_report_generator
                         Console.WriteLine("Broker port set to: " + brokerPort);
                         break;
                     case "3":
+                        Console.Write("Enter device: ");
+                        device = Console.ReadLine();
+                        Console.WriteLine("Device set to: " + device);
+                        break;
+                    case "4":
+                        Console.Write("Enter version: ");
+                        version = Console.ReadLine();
+                        Console.WriteLine("Version set to: " + version);
+                        break;
+                    case "5":
+                        Console.Write("Enter MAC address: ");
+                        mac = Console.ReadLine();
+                        Console.WriteLine("MAC address set to: " + mac);
+                        break;
+                    case "6":
                         if (string.IsNullOrEmpty(brokerAddress))
                         {
                             Console.WriteLine("Broker address is not set. Please set it before generating the report.");
@@ -45,13 +67,25 @@ namespace mqtt_report_generator
                         {
                             Console.WriteLine("Broker port is not set. Please set it before generating the report.");
                         }
+                        else if (string.IsNullOrEmpty(device))
+                        {
+                            Console.WriteLine("Device is not set. Please set it before generating the report.");
+                        }
+                        else if (string.IsNullOrEmpty(version))
+                        {
+                            Console.WriteLine("Version is not set. Please set it before generating the report.");
+                        }
+                        else if (string.IsNullOrEmpty(mac))
+                        {
+                            Console.WriteLine("MAC address is not set. Please set it before generating the report.");
+                        }
                         else
                         {
                             // Call your report generation function here
                             GenerateReport();
                         }
                         break;
-                    case "4":
+                    case "7":
                         Console.WriteLine("Exiting...");
                         return;
                     default:

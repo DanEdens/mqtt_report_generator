@@ -5,12 +5,12 @@ namespace mqtt_report_generator
 {
     class Program
     {
-        static string brokerAddress = Environment.GetEnvironmentVariable("AWSIP");
-        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("AWSPORT"));
+        static string brokerAddress = Environment.GetEnvironmentVariable("BROKER_ADDRESS");
+        static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("BROKER_PORT"));
 
-        static string device = Environment.GetEnvironmentVariable("DUT_DEVICE");
-        static string version = Environment.GetEnvironmentVariable("DUT_VERSION");
-        static string mac = Environment.GetEnvironmentVariable("DUT_MAC_ADDRESS");
+        static string device;
+        static string version;
+        static string mac;
 
         static void Main(string[] args)
         {
@@ -36,29 +36,24 @@ namespace mqtt_report_generator
                 switch (choice)
                 {
                     case "1":
-                        Console.Write("Enter broker address: ");
-                        brokerAddress = Console.ReadLine();
-                        Console.WriteLine("Broker address set to: " + brokerAddress);
+                        brokerAddress = GetInput("Enter broker address: ");
+                        Console.WriteLine($"Broker address set to: {brokerAddress}");
                         break;
                     case "2":
-                        Console.Write("Enter broker port: ");
-                        int.TryParse(Console.ReadLine(), out brokerPort);
-                        Console.WriteLine("Broker port set to: " + brokerPort);
+                        int.TryParse(GetInput("Enter broker port: "), out brokerPort);
+                        Console.WriteLine($"Broker port set to: {brokerPort}");
                         break;
                     case "3":
-                        Console.Write("Enter device: ");
-                        device = Console.ReadLine();
-                        Console.WriteLine("Device set to: " + device);
+                        device = GetInput("Enter device: ");
+                        Console.WriteLine($"Device set to: {device}");
                         break;
                     case "4":
-                        Console.Write("Enter version: ");
-                        version = Console.ReadLine();
-                        Console.WriteLine("Version set to: " + version);
+                        version = GetInput("Enter version: ");
+                        Console.WriteLine($"Version set to: {version}");
                         break;
                     case "5":
-                        Console.Write("Enter MAC address: ");
-                        mac = Console.ReadLine();
-                        Console.WriteLine("MAC address set to: " + mac);
+                        mac = GetInput("Enter MAC address: ");
+                        Console.WriteLine($"MAC address set to: {mac}");
                         break;
                     case "6":
                         if (string.IsNullOrEmpty(brokerAddress))
@@ -102,6 +97,12 @@ namespace mqtt_report_generator
             }
         }
 
+        static string GetInput(string message)
+        {
+            Console.Write(message);
+            return Console.ReadLine();
+        }
+
         static void GenerateReport()
         {
             // TODO: Implement your report generation logic here
@@ -116,11 +117,11 @@ namespace mqtt_report_generator
         {
             Console.WriteLine("Current Variables:");
             Console.WriteLine("------------------");
-            Console.WriteLine("Broker Address: " + brokerAddress);
-            Console.WriteLine("Broker Port: " + brokerPort);
-            Console.WriteLine("Device: " + device);
-            Console.WriteLine("Version: " + version);
-            Console.WriteLine("MAC Address: " + mac);
+            Console.WriteLine($"Broker Address: {brokerAddress}");
+            Console.WriteLine($"Broker Port: {brokerPort}");
+            Console.WriteLine($"Device: {device}");
+            Console.WriteLine($"Version: {version}");
+            Console.WriteLine($"MAC Address: {mac}");
         }
     }
 }

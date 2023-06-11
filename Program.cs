@@ -8,9 +8,9 @@ namespace mqtt_report_generator
         static string brokerAddress = Environment.GetEnvironmentVariable("AWSIP");
         static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("AWSPORT"));
 
-        static string device;
-        static string version;
-        static string mac;
+        static string device = Environment.GetEnvironmentVariable("DUT_DEVICE");
+        static string version = Environment.GetEnvironmentVariable("DUT_VERSION");
+        static string mac = Environment.GetEnvironmentVariable("DUT_MAC_ADDRESS");
 
         static void Main(string[] args)
         {

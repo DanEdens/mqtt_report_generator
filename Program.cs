@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 
+
 namespace mqtt_report_generator
-{
 {
     class Program
     {
@@ -142,6 +142,9 @@ namespace mqtt_report_generator
 
                 // Create an instance of MqttDataProcessor with the log folder path and broker address
                 var dataProcessor = new MqttDataProcessor(logFolderPath, BrokerAddress, brokerPort);
+
+                // Print for debug
+                Console.WriteLine(dataProcessor.ToString());
 
                 // Process the data and generate the report
                 //dataProcessor.ProcessData();

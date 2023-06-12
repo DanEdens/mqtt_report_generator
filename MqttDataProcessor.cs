@@ -25,11 +25,21 @@ namespace mqtt_report_generator
             // Retrieve the dvtMessage using the MQTT client library
             MqttApplicationMessage dvtMessage = mqttClient.RetrieveMessage(dvtTopic).GetAwaiter().GetResult();
 
-            // Extract the dvt-#### values from the message
-            string[] dvtValueArray = dvtMessage.Payload.ToString().Split(',');
+            if (dvtMessage != null)
+            {
+                // Extract the dvt-#### values from the message
+                string[] dvtValueArray = dvtMessage.Payload.ToString().Split(',');
+
+                // Convert the array to a list
+                dvtValues = new List<string>(dvtValueArray);
+            }
+            else
+            {
+                // Handle the case where dvtMessage is null, possibly by throwing an exception or providing a default value for dvtValues
+            }
 
             // Convert the array to a list
-            dvtValues = new List<string>(dvtValueArray);
+            //dvtValues = new List<string>(dvtValueArray);
         }
 
         public void ProcessData()

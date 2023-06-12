@@ -3,6 +3,10 @@ using MQTTnet.Client;
 using MQTTnet.Extensions.ManagedClient;
 using MQTTnet.Protocol;
 using System.Threading.Tasks;
+using MQTTnet.Client.Receiving;
+using MQTTnet.Client.Options;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 
 namespace mqtt_report_generator
 {
@@ -86,11 +90,27 @@ namespace mqtt_report_generator
             await managedMqttClient.UnsubscribeAsync(topic);
         }
 
-        public async Task<MqttApplicationMessage> RetrieveMessage(string topic)
+        public async Task<string> RetrieveMessage(string topic)
         {
-            // TODO: Implement message retrieval logic using the MQTT client library
-            // Return the retrieved message
-            return null;
+            // Subscribe to the MQTT topic
+            await managedMqttClient.SubscribeAsync(topic);
+
+            // Wait for a single message
+            var message = await managedMqttClient.ApplicationMessageReceived
+                .Where(x => x.ApplicationMessage.Topic == topic)
+                .Select(x => x.ApplicationMessage)
+                .FirstOrDefaultAsync();
+
+            // Unsubscribe from the MQTT topic
+            await managedMqttClient.UnsubscribeAsync(topic);
+
+            // Disconnect the client
+            await Disconnect();
+
+            // Return the message payload as a string
+            return message?.ConvertPayloadToString();
         }
+
+
     }
 }

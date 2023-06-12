@@ -4,6 +4,7 @@ using System.IO;
 
 namespace mqtt_report_generator
 {
+{
     class Program
     {
         private static int brokerPort = Convert.ToInt32(Environment.GetEnvironmentVariable("AWSPORT"));
@@ -31,7 +32,7 @@ namespace mqtt_report_generator
 
         static void Main(string[] args)
         {
-            
+
             Console.WriteLine("MQTT Report Generator - Broker Configuration");
             Console.WriteLine("-------------------------------------------");
 

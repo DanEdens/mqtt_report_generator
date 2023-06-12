@@ -75,7 +75,7 @@ namespace mqtt_report_generator
                 .Build();
             await managedMqttClient.EnqueueAsync(message);
         }
-         
+
         public async Task Subscribe(string topic)
         {
             await managedMqttClient.SubscribeAsync(topic);

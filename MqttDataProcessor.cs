@@ -16,14 +16,16 @@ namespace mqtt_report_generator
         {
             this.logFolderPath = logFolderPath;
             // Retrieve the dvt-#### values from the MQTT topic
-            var dvtTopic = "AppTestKit/log/testlist";
+            string dvtTopic = "AppTestKit/log/testlist";
 
             // Instantiate an MQTT client object
             mqttClient = new MqttClient(brokerAddress, brokerPort);
             MqttClient.Connect().GetAwaiter().GetResult();
 
             // Retrieve the dvtMessage using the MQTT client library
-            MqttApplicationMessage dvtMessage = mqttClient.RetrieveMessage(dvtTopic).GetAwaiter().GetResult();
+            MqttApplicationMessage dvtMessage = mqttClient.RetrieveMessage(topic: dvtTopic)
+                .GetAwaiter()
+                .GetResult();
 
             if (dvtMessage != null)
             {

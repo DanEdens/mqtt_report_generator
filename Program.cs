@@ -138,13 +138,13 @@ namespace mqtt_report_generator
 
 
                 // Subscribe to the desired topics
-                mqttClient.Subscribe("AppTestKit/log/#");
+                // mqttClient.Subscribe("AppTestKit/log/#");
 
                 // Create an instance of MqttDataProcessor with the log folder path and broker address
-                var dataProcessor = new MqttDataProcessor(logFolderPath, BrokerAddress, brokerPort);
+                //var dataProcessor = new MqttDataProcessor(logFolderPath, BrokerAddress, brokerPort);
 
                 // Print for debug
-                Console.WriteLine(dataProcessor.ToString());
+                //Console.WriteLine(dataProcessor.ToString());
 
                 // Process the data and generate the report
                 //dataProcessor.ProcessData();

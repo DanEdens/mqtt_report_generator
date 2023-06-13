@@ -14,6 +14,7 @@ namespace mqtt_report_generator
     {
         private IManagedMqttClient managedMqttClient;
 
+
         public MqttClient(string brokerAddress, int brokerPort)
         {
             var options = new ManagedMqttClientOptionsBuilder()
@@ -64,6 +65,15 @@ namespace mqtt_report_generator
             }
         }
 
+
+        private Task ManagedMqttClient_ApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs e)
+        {
+            // Handle the received MQTT message as needed
+            // You can access the received message using e.ApplicationMessage
+
+            return Task.CompletedTask;
+        }
+
         public async Task Disconnect()
         {
             await managedMqttClient.StopAsync();
@@ -92,24 +102,36 @@ namespace mqtt_report_generator
 
         public async Task<string> RetrieveMessage(string topic)
         {
+            var tcs = new TaskCompletionSource<string>();
+
+            void MessageReceivedHandler(MqttApplicationMessageReceivedEventArgs e)
+            {
+                if (e.ApplicationMessage.Topic == topic)
+                {
+                    // Unsubscribe from the MQTT topic
+                    managedMqttClient.ApplicationMessageReceived -= MessageReceivedHandler;
+
+                    // Disconnect the client
+                    Disconnect().GetAwaiter().GetResult();
+
+                    // Resolve the task with the received message payload
+                    tcs.TrySetResult(e.ApplicationMessage.ConvertPayloadToString());
+                }
+            }
+
             // Subscribe to the MQTT topic
             await managedMqttClient.SubscribeAsync(topic);
 
-            // Wait for a single message
-            var message = await managedMqttClient.ApplicationMessageReceived
-                .Where(x => x.ApplicationMessage.Topic == topic)
-                .Select(x => x.ApplicationMessage)
-                .FirstOrDefaultAsync();
+            // Register the message received event handler
+            managedMqttClient.ApplicationMessageReceived += MessageReceivedHandler;
 
-            // Unsubscribe from the MQTT topic
-            await managedMqttClient.UnsubscribeAsync(topic);
+            // Wait for the task to complete
+            var message = await tcs.Task;
 
-            // Disconnect the client
-            await Disconnect();
-
-            // Return the message payload as a string
-            return message?.ConvertPayloadToString();
+            return message;
         }
+
+
 
 
     }
